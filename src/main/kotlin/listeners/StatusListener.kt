@@ -30,14 +30,8 @@ import net.dv8tion.jda.api.events.guild.GuildReadyEvent
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 class StatusListener : ListenerAdapter() {
-
-    companion object {
-        val LOG: Logger = LoggerFactory.getLogger(StatusListener::class.java)
-    }
 
     /**
      * Sets the presence to the member count when the guild starts

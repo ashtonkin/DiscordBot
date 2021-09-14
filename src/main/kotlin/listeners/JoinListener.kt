@@ -27,14 +27,8 @@ package listeners
 
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
-class OnJoinListener : ListenerAdapter() {
-
-    companion object {
-        val LOG: Logger = LoggerFactory.getLogger(OnJoinListener::class.java)
-    }
+class JoinListener : ListenerAdapter() {
 
     override fun onGuildMemberJoin(event: GuildMemberJoinEvent) {
         val guild = event.guild

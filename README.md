@@ -14,7 +14,7 @@ Additional line of information text about what the project does. Your introducti
 ## Using DiscordBot
 
 To use DiscordBot, follow these steps:
-Use the following link: https://discord.com/api/oauth2/authorize?client_id=869889669360394250&permissions=8&scope=bot
+Use the following link: [Add to server](https://discord.com/api/oauth2/authorize?client_id=869889669360394250&permissions=8&scope=bot)
 
 ## Contributors
 

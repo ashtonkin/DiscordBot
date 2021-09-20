@@ -22,29 +22,26 @@
  * SOFTWARE.
  *
  */
-package listeners
 
-import net.dv8tion.jda.api.JDA
-import net.dv8tion.jda.api.entities.Activity
-import net.dv8tion.jda.api.events.guild.GuildReadyEvent
-import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent
-import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent
-import net.dv8tion.jda.api.hooks.ListenerAdapter
+package utils
 
-class StatusListener : ListenerAdapter() {
+import net.dv8tion.jda.api.entities.Message
+import net.dv8tion.jda.api.entities.MessageChannel
+import net.dv8tion.jda.api.entities.MessageEmbed
+import net.dv8tion.jda.api.entities.TextChannel
 
-    override fun onGuildReady(event: GuildReadyEvent) =
-        updatePresence(event.jda, event.guild.memberCount)
+class MessageUtils {
 
+    fun TextChannel.queueMessage(message : Message) = sendMessage(message).queue()
 
-    override fun onGuildMemberJoin(event: GuildMemberJoinEvent) =
-        updatePresence(event.jda, event.guild.memberCount)
+    fun TextChannel.queueMessage(message : CharSequence) = sendMessage(message).queue()
 
+    fun TextChannel.queueMessage(message : MessageEmbed) = sendMessageEmbeds(message).queue()
 
-    override fun onGuildMemberRemove(event: GuildMemberRemoveEvent) =
-        updatePresence(event.jda, event.guild.memberCount)
+    fun MessageChannel.queueMessage(message : Message) = sendMessage(message).queue()
 
+    fun MessageChannel.queueMessage(message : CharSequence) = sendMessage(message).queue()
 
-    private fun updatePresence(jda: JDA, members: Int) =
-        jda.presence.setPresence(Activity.watching("$members members"), false)
+    fun MessageChannel.queueMessage(message : MessageEmbed) = sendMessageEmbeds(message).queue()
+
 }

@@ -25,41 +25,48 @@
 
 package listeners
 
-import net.dv8tion.jda.api.entities.Message
-import net.dv8tion.jda.api.entities.TextChannel
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent
 import net.dv8tion.jda.api.events.message.react.MessageReactionRemoveEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 class MessageReactionListener : ListenerAdapter() {
 
-    companion object {
-        val LOG: Logger = LoggerFactory.getLogger(JoinListener::class.java)
-    }
-
     override fun onMessageReactionAdd(event: MessageReactionAddEvent) {
-
-        if (event.reactionEmote.asReactionCode == "minecraft:887306002523901952") {
-            event.guild.addRoleToMember(event.member!!, event.guild.getRoleById(873565563077685309)!!).queue()
-            return
-        }
-
-        if (event.reactionEmote.asReactionCode == "Bot:887306146518536223") {
-            event.guild.addRoleToMember(event.member!!, event.guild.getRoleById(873565363105833002)!!).queue()
+        if (event.messageIdLong == 887938440195366922) {
+            when (event.reactionEmote.asReactionCode) {
+                "minecraft:887306002523901952" -> event.guild.addRoleToMember(
+                    event.member!!,
+                    event.guild.getRoleById(873565563077685309)!!
+                ).queue()
+                "Bot:887306146518536223" -> event.guild.addRoleToMember(
+                    event.member!!,
+                    event.guild.getRoleById(873565363105833002)!!
+                ).queue()
+                "\uD83D\uDCE2" -> event.guild.addRoleToMember(
+                    event.member!!,
+                    event.guild.getRoleById(873550638913556481)!!
+                ).queue()
+            }
             return
         }
     }
 
     override fun onMessageReactionRemove(event: MessageReactionRemoveEvent) {
-        if (event.reactionEmote.asReactionCode == "minecraft:887306002523901952") {
-            event.guild.removeRoleFromMember(event.member!!, event.guild.getRoleById(873565563077685309)!!).queue()
-            return
-        }
-
-        if (event.reactionEmote.asReactionCode == "Bot:887306146518536223") {
-            event.guild.removeRoleFromMember(event.member!!, event.guild.getRoleById(873565363105833002)!!).queue()
+        if (event.messageIdLong == 887938440195366922) {
+            when (event.reactionEmote.asReactionCode) {
+                "minecraft:887306002523901952" -> event.guild.removeRoleFromMember(
+                    event.member!!,
+                    event.guild.getRoleById(873565563077685309)!!
+                ).queue()
+                "Bot:887306146518536223" -> event.guild.removeRoleFromMember(
+                    event.member!!,
+                    event.guild.getRoleById(873565363105833002)!!
+                ).queue()
+                "\uD83D\uDCE2" -> event.guild.removeRoleFromMember(
+                    event.member!!,
+                    event.guild.getRoleById(873550638913556481)!!
+                ).queue()
+            }
             return
         }
     }

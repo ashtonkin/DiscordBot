@@ -24,4 +24,4 @@ Thanks to the following people who have contributed to this project:
 
 ## License
 
-This project uses the following license: [MIT](<link>).
+This project uses the following license: [MIT](https://github.com/AshDevs/DiscordBot/blob/master/LICENSE).

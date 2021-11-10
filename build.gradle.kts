@@ -24,10 +24,12 @@ dependencies {
     //Logging
     implementation("ch.qos.logback:logback-classic:1.2.6")
 
-
     //Database
-    implementation("com.zaxxer:HikariCP:3.4.5")
-    implementation("mysql:mysql-connector-java:8.0.20")
+    implementation("com.zaxxer:HikariCP:5.0.0")
+    implementation("mysql:mysql-connector-java:8.0.25")
+
+    //Config
+    implementation("ch.jalu:configme:1.2.0")
 }
 
 tasks.test {

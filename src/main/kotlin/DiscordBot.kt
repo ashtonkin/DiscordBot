@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory
 
 class DiscordBot {
 
-    private val db: Database = Database("discordBot", "discordBot", "discordBot")
+    private val db: Database = Database("discordBot", "root", "")
 
     companion object {
         val logger: Logger = LoggerFactory.getLogger(DiscordBot::class.java)
@@ -19,7 +19,7 @@ class DiscordBot {
     private val token: String = System.getProperty("TOKEN")
 
     private val jda = JDABuilder.create(
-        db.getInfo("token", "discordBot", "name = token"),
+        db.getInfo("token", "private", "name = token"),
         listOf(
             GatewayIntent.GUILD_BANS,
             GatewayIntent.GUILD_EMOJIS,
@@ -36,7 +36,7 @@ class DiscordBot {
 
     init {
         jda.awaitReady()
-        db.insert("discordBot", listOf("name", "value"), listOf("token", token))
+        db.insert("private", listOf("name", "value"), listOf("token", token))
         db.getConnection()
         logger.info("Bot is running!")
         registerListeners()
@@ -52,7 +52,6 @@ class DiscordBot {
     }
 
     //TODO:
-    // - Add token to database
     // - Add database to project URL
     // - Setup Announcement command for staff only
 }

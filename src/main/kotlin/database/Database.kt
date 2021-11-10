@@ -32,14 +32,14 @@ import java.sql.DriverManager
 import java.sql.ResultSet
 
 // Create a new database class and database and connect to it
-class Database(private val dbName: String, private val dbUser: String, private val dbPass: String) {
+class Database(dbName: String, dbUser: String, dbPass: String) {
 
     // Logger
     companion object {
         val logger: Logger = LoggerFactory.getLogger(Database::class.java)
     }
 
-    private val dbUrl = "jdbc:mysql://localhost:3306/$dbName?useSSL=false"
+    private val dbUrl = "jdbc:mariadb://localhost:3306/$dbName?useSSL=false"
     private val dbDriver = "com.mysql.jdbc.Driver"
     private val dbConnection: Connection
 
@@ -48,9 +48,12 @@ class Database(private val dbName: String, private val dbUser: String, private v
         dbConnection = DriverManager.getConnection(dbUrl, dbUser, dbPass)
     }
 
-    // Insert a new row into the database
+    // If row exists in the database than do nothing, otherwise insert a new row
     fun insert(table: String, columns: List<String>, values: List<String>) {
-        val query = "INSERT INTO $table (${columns.joinToString(",")}) VALUES (${values.joinToString(",")})"
+        val query =
+            "INSERT INTO $table (${columns.joinToString(",")}) VALUES (${values.joinToString(",")}) ON DUPLICATE KEY UPDATE ${
+                columns.joinToString(",")
+            } = ${values.joinToString(",")}"
         logger.info("Inserting into $table: $query")
         val statement = dbConnection.createStatement()
         statement.executeUpdate(query)
@@ -80,6 +83,14 @@ class Database(private val dbName: String, private val dbUser: String, private v
         return statement.executeQuery(query)
     }
 
+    // Select all rows from the database
+    fun selectAll(table: String): ResultSet {
+        val query = "SELECT * FROM $table"
+        logger.info("Selecting all from $table: $query")
+        val statement = dbConnection.createStatement()
+        return statement.executeQuery(query)
+    }
+
     // Get information from the database
     fun getInfo(column: String, table: String, where: String): String {
         val query = "SELECT $column FROM $table WHERE $where"
@@ -98,7 +109,7 @@ class Database(private val dbName: String, private val dbUser: String, private v
 
     // Return the database connection
     fun getConnection(): Connection {
-        logger.info("Returning database connection")
+        logger.info("Database connected")
         return dbConnection
     }
 

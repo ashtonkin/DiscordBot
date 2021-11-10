@@ -26,10 +26,10 @@ dependencies {
 
     //Database
     implementation("com.zaxxer:HikariCP:5.0.0")
-    implementation("mysql:mysql-connector-java:8.0.25")
+    implementation("org.mariadb.jdbc:mariadb-java-client:2.7.3")
 
     //Config
-    implementation("ch.jalu:configme:1.2.0")
+    implementation("ch.jalu:configme:1.3.0")
 }
 
 tasks.test {

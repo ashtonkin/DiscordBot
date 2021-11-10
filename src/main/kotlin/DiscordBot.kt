@@ -6,20 +6,25 @@ import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.requests.GatewayIntent
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.util.*
 
 class DiscordBot {
 
-    private val db: Database = Database("discordBot", "root", "")
+    private val db: Database = Database("discordBot", "root", "password")
 
     companion object {
         val logger: Logger = LoggerFactory.getLogger(DiscordBot::class.java)
     }
 
-    // Get token from bot.properties
-    private val token: String = System.getProperty("TOKEN")
+    init {
+        val props = Properties()
+        props.load(DiscordBot::class.java.getResourceAsStream("/bot.properties"))
+        val token = props.getProperty("TOKEN")
+        db.insert("private", mapOf("name" to "discord_bot_token", "value" to token))
+    }
 
     private val jda = JDABuilder.create(
-        db.getInfo("token", "private", "name = token"),
+        db.getValue("private", "value", "name = 'discord_bot_token'"),
         listOf(
             GatewayIntent.GUILD_BANS,
             GatewayIntent.GUILD_EMOJIS,
@@ -36,7 +41,6 @@ class DiscordBot {
 
     init {
         jda.awaitReady()
-        db.insert("private", listOf("name", "value"), listOf("token", token))
         db.getConnection()
         logger.info("Bot is running!")
         registerListeners()

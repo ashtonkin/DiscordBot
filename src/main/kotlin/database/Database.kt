@@ -39,8 +39,8 @@ class Database(dbName: String, dbUser: String, dbPass: String) {
         val logger: Logger = LoggerFactory.getLogger(Database::class.java)
     }
 
-    private val dbUrl = "jdbc:mariadb://localhost:3306/$dbName?useSSL=false"
-    private val dbDriver = "com.mysql.jdbc.Driver"
+    private val dbUrl = "jdbc:mariadb://localhost:3306/$dbName"
+    private val dbDriver = "org.mariadb.jdbc.Driver"
     private val dbConnection: Connection
 
     init {
@@ -48,57 +48,55 @@ class Database(dbName: String, dbUser: String, dbPass: String) {
         dbConnection = DriverManager.getConnection(dbUrl, dbUser, dbPass)
     }
 
-    // If row exists in the database than do nothing, otherwise insert a new row
-    fun insert(table: String, columns: List<String>, values: List<String>) {
-        val query =
-            "INSERT INTO $table (${columns.joinToString(",")}) VALUES (${values.joinToString(",")}) ON DUPLICATE KEY UPDATE ${
-                columns.joinToString(",")
-            } = ${values.joinToString(",")}"
-        logger.info("Inserting into $table: $query")
-        val statement = dbConnection.createStatement()
-        statement.executeUpdate(query)
+    // Insert a new row into the database
+    fun insert(table: String, values: Map<String, Any?>): ResultSet {
+        val sql = "INSERT INTO $table " +
+                "(" + values.keys.joinToString(", ") + ") " +
+                "VALUES " +
+                "(" + values.values.map { if (it == null) "NULL" else "'$it'" }.joinToString(", ") + ")"
+        logger.info("SQL: $sql")
+        return dbConnection.prepareStatement(sql).executeQuery()
     }
 
     // Update a row in the database
-    fun update(table: String, columns: List<String>, values: List<String>, where: String) {
-        val query = "UPDATE $table SET ${columns.joinToString(",")} = ${values.joinToString(",")} WHERE $where"
-        logger.info("Updating $table: $query")
-        val statement = dbConnection.createStatement()
-        statement.executeUpdate(query)
+    fun update(table: String, values: Map<String, Any?>, where: String): ResultSet {
+        val sql = "UPDATE $table " +
+                "SET " + values.map { "${it.key} = ${if (it.value == null) "NULL" else "'${it.value}'"}" }.joinToString(", ") + " " +
+                "WHERE $where"
+        logger.info("SQL: $sql")
+        return dbConnection.prepareStatement(sql).executeQuery()
     }
 
     // Delete a row from the database
-    fun delete(table: String, where: String) {
-        val query = "DELETE FROM $table WHERE $where"
-        logger.info("Deleting from $table: $query")
-        val statement = dbConnection.createStatement()
-        statement.executeUpdate(query)
+    fun delete(table: String, where: String): ResultSet {
+        val sql = "DELETE FROM $table WHERE $where"
+        logger.info("SQL: $sql")
+        return dbConnection.prepareStatement(sql).executeQuery()
     }
 
     // Select a row from the database
-    fun select(table: String, columns: List<String>, where: String): ResultSet {
-        val query = "SELECT ${columns.joinToString(",")} FROM $table WHERE $where"
-        logger.info("Selecting from $table: $query")
-        val statement = dbConnection.createStatement()
-        return statement.executeQuery(query)
+    fun select(table: String, where: String): ResultSet {
+        val sql = "SELECT * FROM $table WHERE $where"
+        logger.info("SQL: $sql")
+        return dbConnection.prepareStatement(sql).executeQuery()
     }
 
     // Select all rows from the database
     fun selectAll(table: String): ResultSet {
-        val query = "SELECT * FROM $table"
-        logger.info("Selecting all from $table: $query")
-        val statement = dbConnection.createStatement()
-        return statement.executeQuery(query)
+        val sql = "SELECT * FROM $table"
+        logger.info("SQL: $sql")
+        return dbConnection.prepareStatement(sql).executeQuery()
     }
 
-    // Get information from the database
-    fun getInfo(column: String, table: String, where: String): String {
-        val query = "SELECT $column FROM $table WHERE $where"
-        logger.info("Getting info from $table: $query")
-        val statement = dbConnection.createStatement()
-        val result = statement.executeQuery(query)
-        result.next()
-        return result.getString(column)
+    // Get Value from the database and return it as a string
+    fun getValue(table: String, column: String, where: String): String {
+        val sql = "SELECT $column FROM $table WHERE $where"
+        logger.info("SQL: $sql")
+        val rs = dbConnection.prepareStatement(sql).executeQuery()
+        if (rs.next()) {
+            return rs.getString(1)
+        }
+        return ""
     }
 
     // Close the database connection

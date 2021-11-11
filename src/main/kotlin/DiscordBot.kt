@@ -54,8 +54,4 @@ class DiscordBot {
         logger.info("Registering ${listeners.size} listeners..")
         listeners.forEach { jda.addEventListener(it) }
     }
-
-    //TODO:
-    // - Add database to project URL
-    // - Setup Announcement command for staff only
 }

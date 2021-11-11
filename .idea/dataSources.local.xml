@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="dataSourceStorageLocal" created-in="IU-212.5457.46">
-    <data-source name="discordbot@localhost" uuid="d54e55ca-cf79-48fe-9ed2-5a8f6e444dd3">
+    <data-source name="discordbot@localhost" uuid="2eef6878-894b-43cc-a018-0a335b4b7883">
       <database-info product="MariaDB" version="10.5.4-MariaDB" jdbc-version="4.2" driver-name="MariaDB Connector/J" driver-version="2.7.3" dbms="MARIADB" exact-version="10.5.4" exact-driver-version="2.7">
         <extra-name-characters>#@</extra-name-characters>
         <identifier-quote-string>`</identifier-quote-string>
@@ -11,7 +11,7 @@
       <user-name>root</user-name>
       <schema-mapping>
         <introspection-scope>
-          <node kind="schema" qname="discordbot" />
+          <node kind="schema" qname="@" />
         </introspection-scope>
       </schema-mapping>
     </data-source>
